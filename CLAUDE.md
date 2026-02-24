@@ -1,3 +1,7 @@
+# 核心原则导入（最高优先级）
+
+@constitution.md
+
 # 项目概述
 
 - 基于 Next.js 的 Web3 DEX 启动项目

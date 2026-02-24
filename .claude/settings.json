@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(src/**)",
+      "Read(public/**)",
+      "Read(*.json)",
+      "Read(*.ts)",
+      "Read(*.mjs)",
+      "Read(*.md)",
+      "Read(*.css)",
+      "Read(specs/**)",
+      "Grep",
+      "Glob",
+      "Bash(pnpm:dev)",
+      "Bash(pnpm:build)",
+      "Bash(pnpm:lint)",
+      "Bash(pnpm:format)",
+      "Bash(npx:@biomejs/biome:*)",
+      "Bash(npx:next:*)",
+      "Bash(npx:tsc:*)"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Read(*.pem)",
+      "Read(*.key)",
+      "Bash(rm:-rf:*)",
+      "Bash(git:push:--force:*)"
+    ]
+  }
+}
