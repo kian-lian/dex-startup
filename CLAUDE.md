@@ -1,61 +1,61 @@
-# 核心原则（最高优先级）
+# Core Principles (Highest Priority)
 
 @constitution.md
 
-# 项目上下文
+# Project Context
 
 @AGENTS.md
 
-# Claude Code 专属指南
+# Claude Code Guide
 
-以下内容仅与 Claude Code 工作流相关，通用项目信息见 `AGENTS.md`。
+The following is specific to Claude Code workflows. For general project info, see `AGENTS.md`.
 
-## 技术栈文档入口
+## Tech Stack Documentation
 
-查阅技术栈用法时，优先访问以下 LLM 友好文档：
+When looking up tech stack usage, prefer these LLM-friendly docs:
 
-- Next.js：https://nextjs.org/llms.txt
-- Wagmi：https://wagmi.sh/llms.txt
-- RainbowKit：https://rainbowkit.com/llms.txt
-- shadcn/ui：https://ui.shadcn.com/llms.txt
+- Next.js: https://nextjs.org/llms.txt
+- Wagmi: https://wagmi.sh/llms.txt
+- RainbowKit: https://rainbowkit.com/llms.txt
+- shadcn/ui: https://ui.shadcn.com/llms.txt
 
-## UI 组件
+## UI Components
 
-- shadcn/ui 组件通过 CLI 添加：`npx shadcn@latest add <component>`
-- 安装后位于 `src/shared/components/ui/`，引入路径使用 `@/shared/components/ui/button`
+- Add shadcn/ui components via CLI: `npx shadcn@latest add <component>`
+- Installed to `src/shared/components/ui/`; import as `@/shared/components/ui/button`
 
-## MCP 服务集成
+## MCP Integrations
 
-若以下 MCP 未安装，应提示用户配置：
+Prompt the user to configure these if not installed:
 
-- shadcn MCP：`npx shadcn@latest mcp init --client claude`（[文档](https://ui.shadcn.com/docs/mcp)）
-- TanStack MCP：`claude mcp add --transport stdio --scope user tanstack -- npx @tanstack/cli mcp`（[文档](https://tanstack.com/cli/latest/docs/mcp/overview)）
+- shadcn MCP: `npx shadcn@latest mcp init --client claude` ([docs](https://ui.shadcn.com/docs/mcp))
+- TanStack MCP: `claude mcp add --transport stdio --scope user tanstack -- npx @tanstack/cli mcp` ([docs](https://tanstack.com/cli/latest/docs/mcp/overview))
 
-## 代码质量命令
+## Commands
 
-- 格式化：`npx @biomejs/biome format --write .`
-- Lint：`npx @biomejs/biome lint .`
-- 全量检查：`npx @biomejs/biome check --write .`
+- Dev server: `pnpm dev`
+- Type check: `pnpm typecheck`
+- Lint: `pnpm lint`
+- Format: `pnpm format`
+- Tests: `pnpm test` (watch) / `pnpm test:run` (one-shot)
+- Coverage: `pnpm test:coverage`
+- Spell check: `pnpm spellcheck`
+- Full quality gate: `pnpm ci`
+- Security scan: `pnpm security:audit` / `pnpm security:secrets`
 
-## 测试命令
+## Environment Configuration
 
-- 运行测试：`pnpm test`（watch 模式）/ `pnpm test:run`（单次）
-- 覆盖率：`pnpm test:coverage`
-- 拼写检查：`pnpm spellcheck`
+Per-environment config is managed via `.env.*` files, with a single entry point at `src/shared/config/env.ts`:
 
-## 环境配置
+- `.env` — shared defaults (committed to git)
+- `.env.development` — loaded during `pnpm dev` (testnet, Sentry off)
+- `.env.test` — loaded during vitest
+- `.env.production` — loaded during `pnpm build` (mainnet, Sentry sampling)
+- `.env.local` — local secret overrides (gitignored)
 
-分环境配置通过 `.env.*` 文件体系管理，统一入口为 `src/shared/config/env.ts`：
+Business code imports config from `@/shared/config/env` — never read `process.env` directly.
 
-- `.env` — 共享默认值（提交到 git）
-- `.env.development` — `pnpm dev` 时加载（测试网、Sentry 关闭）
-- `.env.test` — vitest 时加载
-- `.env.production` — `pnpm build` 时加载（主网、Sentry 采样）
-- `.env.local` — 本地密钥覆盖（gitignored）
+## Tooling
 
-业务代码从 `@/shared/config/env` 导入配置，不直接读 `process.env`。
-
-## 工具链
-
-- 包管理器：pnpm
-- GitHub 操作：`gh` CLI
+- Package manager: pnpm
+- GitHub operations: `gh` CLI

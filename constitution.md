@@ -1,84 +1,84 @@
-# Web3 DEX 项目开发宪法
+# Web3 DEX Project Development Constitution
 
-Version: 2.0 | Ratified: 2026-02-26
+Version: 2.1 | Ratified: 2026-03-08
 
-本文件定义不可动摇的核心开发原则。所有 AI Agent 必须无条件遵循。
-
----
-
-## 治理 (Governance)
-
-- **文档优先级：** constitution.md > CLAUDE.md > AGENTS.md > 单次会话指令
-- **修改流程：** 对本宪法的任何修改必须通过 Pull Request 审查
-- **项目定位：** 纯前端 DEX 聚合器——不编写、不部署、不审计智能合约
+This document defines immutable core development principles. All AI Agents must follow unconditionally.
 
 ---
 
-## 第一条：安全性至上 (Security First) — 不可协商
+## Governance
 
-Web3 项目直接涉及用户资产，安全是一切工作的前提。
-
-- **1.1 (私钥零接触):** 项目代码不得处理、存储或传输用户私钥。所有签名操作委托钱包（Wagmi/RainbowKit）完成。
-- **1.2 (环境变量隔离):** 密钥、API Key、Project ID 等敏感信息通过 `.env.local` 注入，绝不硬编码。`.env*` 已被 `.gitignore` 排除，不得移除此规则。
-- **1.3 (输入校验):** 所有用户输入的链上参数（地址、金额、slippage）必须在提交前用 `viem` 工具函数（`isAddress`、`parseEther`）校验，不得自行实现校验逻辑。
-- **1.4 (依赖审慎):** Web3 相关依赖仅限 `wagmi`、`viem`、`@rainbow-me/rainbowkit` 及其官方生态。引入新依赖前必须评估安全性和必要性。
-- **1.5 (Slippage 保护):** 所有 swap 交易必须设置滑点上限，禁止发起无滑点保护的交易。默认滑点应≤ 0.5%，用户可自行调整但需明确警告高滑点风险。
-- **1.6 (Approve 安全):** 禁止请求无限授权（`MaxUint256`）。Token approve 金额应精确匹配交易所需，或提供明确的用户选择。
+- **Document priority:** constitution.md > CLAUDE.md > AGENTS.md > single-session instructions
+- **Amendment process:** Any changes to this constitution must go through a Pull Request review
+- **Project scope:** Frontend-only DEX startup template — no writing, deploying, or auditing smart contracts
 
 ---
 
-## 第二条：类型安全铁律 (Type Safety) — 不可协商
+## Article 1: Security First — Non-Negotiable
 
-TypeScript 严格模式是项目的安全网，不得绕过。
+Web3 projects directly handle user assets. Security is the prerequisite for all work.
 
-- **2.1 (禁止 any):** 绝不允许 `any`。使用 `unknown` + 类型守卫，或正确定义类型。
-- **2.2 (禁止断言滥用):** `as` 仅允许在确有必要且附带注释说明原因时使用。禁止用 `as` 掩盖类型错误。
-- **2.3 (链上数据类型化):** 所有链上数据（ABI、交易参数、返回值）必须有明确类型定义。充分利用 Wagmi/Viem 的类型推导。
-
----
-
-## 第三条：组件架构原则 (Component Architecture)
-
-遵循 Next.js App Router 的 Server/Client 组件模型，最小化客户端 JavaScript。
-
-- **3.1 (Server Component 优先):** 默认所有组件为 Server Component。仅在需要浏览器 API、React 状态、事件监听或 Web3 hooks 时标记 `"use client"`。
-- **3.2 (Client 边界下沉):** `"use client"` 边界下沉到组件树叶子节点。交互逻辑封装在小的 Client Component 中。
-- **3.3 (Provider 隔离):** 全局 Provider 统一在 `src/providers/` 管理，通过组合模式嵌套，禁止在页面组件中直接包裹 Provider。
+- **1.1 (Zero Private Key Access):** Project code must never handle, store, or transmit user private keys. All signing operations are delegated to wallets (Wagmi/RainbowKit).
+- **1.2 (Environment Variable Isolation):** Secrets, API keys, and Project IDs are injected via `.env.local`, never hardcoded. Only local override files (for example `.env.local`, `.env.development.local`) are excluded by `.gitignore`; shared non-secret defaults in `.env*` may be committed.
+- **1.3 (Input Validation):** All user-supplied on-chain parameters (addresses, amounts, slippage) must be validated before submission using `viem` utility functions (`isAddress`, `parseEther`). Do not implement custom validation logic.
+- **1.4 (Dependency Prudence):** Web3-related dependencies are limited to `wagmi`, `viem`, `@rainbow-me/rainbowkit`, and their official ecosystem. Evaluate security and necessity before introducing new dependencies.
+- **1.5 (Slippage Protection):** All swap transactions must set a slippage cap. Transactions without slippage protection are forbidden. Default slippage should be ≤ 0.5%; users may adjust but must receive a clear high-slippage warning.
+- **1.6 (Approve Safety):** Infinite approvals (`MaxUint256`) are forbidden. Token approve amounts must exactly match the transaction requirement, or provide an explicit user choice.
 
 ---
 
-## 第四条：状态管理分层 (State Management Hierarchy)
+## Article 2: Type Safety — Non-Negotiable
 
-不同来源的状态使用不同管理方案，不得混用。
+TypeScript strict mode is the project's safety net and must not be bypassed.
 
-- **4.1 (链上状态):** 通过 Wagmi hooks（`useReadContract`、`useBalance`）获取，TanStack Query 管理缓存。禁止手动缓存链上数据到 React state。
-- **4.2 (服务端状态):** 链下 API 数据（价格、元数据）使用 TanStack Query。
-- **4.3 (客户端状态):** 纯 UI 状态使用 `useState`/`useReducer`。全局 UI 状态优先通过组件组合和 props 传递解决。
-
----
-
-## 第五条：错误处理原则 (Error Handling)
-
-Web3 交互天然不稳定，必须对所有可能失败的操作进行显式错误处理。
-
-- **5.1 (交易错误):** 所有链上写操作必须处理用户拒绝、gas 不足、交易回滚，并向用户提供清晰反馈。
-- **5.2 (网络错误):** 必须处理 RPC 不可达、链切换失败等网络层错误。
-- **5.3 (禁止静默吞错):** 禁止空 `catch` 块。所有 `catch` 必须记录错误或向用户展示反馈。
+- **2.1 (No `any`):** `any` is never allowed. Use `unknown` + type guards, or define proper types.
+- **2.2 (No Assertion Abuse):** `as` is only permitted when genuinely necessary and accompanied by a comment explaining why. Do not use `as` to mask type errors.
+- **2.3 (Typed On-Chain Data):** All on-chain data (ABIs, transaction parameters, return values) must have explicit type definitions. Leverage Wagmi/Viem type inference fully.
 
 ---
 
-## 第六条：代码风格统一 (Code Consistency)
+## Article 3: Component Architecture
 
-代码风格由工具强制保证，不依赖人工自觉。
+Follow the Next.js App Router Server/Client Component model. Minimize client-side JavaScript.
 
-- **6.1 (工具权威):** Biome 是代码风格的唯一权威来源。提交前必须通过检查，不得绕过。
-- **6.2 (命名一致性):** 遵循统一的命名约定（具体规则见 `AGENTS.md`），禁止混用多种风格。
+- **3.1 (Server Components First):** All components are Server Components by default. Only add `"use client"` when browser APIs, React state, event listeners, or Web3 hooks are needed.
+- **3.2 (Push Client Boundaries Down):** Push `"use client"` boundaries to leaf nodes in the component tree. Encapsulate interactive logic in small Client Components.
+- **3.3 (Provider Isolation):** Global providers are managed centrally in `src/shared/providers/`, composed via nesting. Do not wrap providers directly in page components.
 
 ---
 
-## 本项目不是 (Negative Definitions)
+## Article 4: State Management Hierarchy
 
-以下明确列出本项目的边界，防止 AI Agent 偏离方向：
+Different state sources use different management strategies. Do not mix them.
 
-- **不是**智能合约开发项目——不编写 Solidity/Vyper 代码
-- **不是**多链桥接项目——不实现跨链资产转移逻辑
+- **4.1 (On-Chain State):** Fetched via Wagmi hooks (`useReadContract`, `useBalance`), cached by TanStack Query. Do not manually cache on-chain data in React state.
+- **4.2 (Server State):** Off-chain API data (prices, metadata) uses TanStack Query.
+- **4.3 (Client State):** Pure UI state uses `useState`/`useReducer`. Global UI state should be solved through component composition and props first.
+
+---
+
+## Article 5: Error Handling
+
+Web3 interactions are inherently unreliable. All potentially failing operations must have explicit error handling.
+
+- **5.1 (Transaction Errors):** All on-chain write operations must handle user rejection, insufficient gas, and transaction revert, providing clear user feedback.
+- **5.2 (Network Errors):** Must handle RPC unreachable, chain switch failures, and other network-layer errors.
+- **5.3 (No Silent Swallowing):** Empty `catch` blocks are forbidden. Every `catch` must log the error or display feedback to the user.
+
+---
+
+## Article 6: Code Consistency
+
+Code style is enforced by tooling, not human discipline.
+
+- **6.1 (Tooling Authority):** Biome is the single source of truth for code style. All code must pass checks before committing — no bypassing.
+- **6.2 (Naming Consistency):** Follow unified naming conventions (see `AGENTS.md`). Do not mix multiple styles.
+
+---
+
+## What This Project Is Not (Negative Definitions)
+
+These boundaries prevent AI Agents from going off-track:
+
+- **Not** a smart contract project — no Solidity/Vyper code
+- **Not** a cross-chain bridge project — no cross-chain asset transfer logic

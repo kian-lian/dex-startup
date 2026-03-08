@@ -1,0 +1,19 @@
+# Gitleaks config — detect accidentally committed secrets in the repo.
+# Run: pnpm security:secrets
+# Docs: https://github.com/gitleaks/gitleaks
+title = "DEX Startup gitleaks config"
+
+# Inherit the built-in default ruleset (~150 rules) covering
+# AWS keys, GitHub tokens, private keys, generic passwords, etc.
+[extend]
+useDefault = true
+
+# Allowlist: suppress known false positives.
+# Sentry DSN is a project identifier (not a secret) and is intentionally
+# exposed to the browser via the NEXT_PUBLIC_ prefix — safe to ignore.
+[[allowlists]]
+description = "Allow public Sentry DSN in NEXT_PUBLIC config"
+regexTarget = "line"
+regexes = [
+  '''^NEXT_PUBLIC_SENTRY_DSN=.*$''',
+]

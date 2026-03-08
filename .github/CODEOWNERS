@@ -1,0 +1,8 @@
+# Default repository owner
+* @lian
+
+# Domain ownership (adjust when team grows)
+/src/app/ @lian
+/src/features/ @lian
+/src/shared/ @lian
+/docs/ @lian

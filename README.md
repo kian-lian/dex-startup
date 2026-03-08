@@ -1,86 +1,161 @@
-# Web3 DEX
+# DEX Startup Template
 
-A decentralized exchange starter project built with Next.js.
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+A production-oriented starter template for building DEX (decentralized exchange) frontends with Next.js, WalletConnect, and modern engineering guardrails.
+
+## What This Template Includes
+
+- App Router based Next.js application (`next@16`)
+- Web3 connection stack with `wagmi`, `viem`, and `rainbowkit`
+- Feature-First architecture (`app -> features -> shared`)
+- Typed env access from a single source (`src/shared/config/env.ts`)
+- Built-in observability (`@sentry/nextjs` + `pino` logger)
+- Quality gates: Biome, TypeScript strict mode, Vitest, cspell
+- Commit and pre-commit hygiene with Husky + lint-staged + commitlint
 
 ## Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org) (App Router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com)
-- **Web3**: [Wagmi](https://wagmi.sh) + [viem](https://viem.sh)
-- **Wallet Connection**: [RainbowKit](https://rainbowkit.com)
-- **State Management**: [TanStack Query](https://tanstack.com/query)
-- **Code Quality**: [Biome](https://biomejs.dev)
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript (strict)
+- **Web3**: wagmi + viem + RainbowKit
+- **State/Data**: TanStack Query
+- **Styling**: Tailwind CSS v4
+- **Testing**: Vitest + Testing Library
+- **Quality**: Biome + cspell
+- **Monitoring**: Sentry + Pino
 
-## Getting Started
+## Quick Start
 
-### Prerequisites
+### 1) Prerequisites
 
-- Node.js 18+
-- pnpm 8+
+- Node.js 20+
+- pnpm 9+
 
-### Install Dependencies
+### 2) Install
 
 ```bash
 pnpm install
 ```
 
-### Configure Environment Variables
+### 3) Configure Environment
 
 ```bash
 cp .env.example .env.local
 ```
 
-Add your WalletConnect Project ID to `.env.local`:
+Set your WalletConnect project ID in `.env.local`:
 
-```
+```bash
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 ```
 
-> Get a free Project ID at [WalletConnect Cloud](https://cloud.walletconnect.com)
+> Get one at: https://cloud.walletconnect.com
 
-### Start Development Server
+### 4) Run Development Server
 
 ```bash
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open http://localhost:3000
+
+## 5-Minute Onboarding
+
+If you just joined the project, follow this order:
+
+1. Run the app: `pnpm dev`
+2. Run baseline checks: `pnpm lint && pnpm typecheck && pnpm test:run`
+3. Read architecture entry points:
+   - `src/app/` (routing and page composition)
+   - `src/features/` (business domains)
+   - `src/shared/` (cross-feature infrastructure)
+4. Read environment contract: `src/shared/config/env.ts`
+5. Before your first PR, run:
+   - `pnpm run ci`
+   - `pnpm security:audit`
+   - `pnpm security:secrets`
+
+Suggested first contribution:
+
+- Pick a small docs/test improvement and verify all quality gates pass.
 
 ## Project Structure
 
-```
+```text
 src/
-├── app/                    # Next.js App Router
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx            # Home page
-│   └── globals.css         # Global styles
-├── config/
-│   └── wagmi.ts            # Wagmi config (chains, connectors)
-├── providers/
-│   ├── index.tsx           # Provider composition layer
-│   ├── query-provider.tsx  # React Query Provider
-│   └── web3-provider.tsx   # Wagmi + RainbowKit Provider
+  app/                  # Next.js route and layout layer
+  features/             # Domain modules (swap, token, wallet)
+  shared/               # Cross-feature infrastructure and utilities
+    config/             # env, wagmi config
+    providers/          # React Query/Web3 providers
+    lib/                # shared utilities
+  test/                 # test setup utilities
 ```
-
-## Supported Chains
-
-- Ethereum Mainnet
-- Arbitrum
-- Optimism
-- Polygon
-- Base
-
-Modify supported chains in `src/config/wagmi.ts`.
 
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
+| --- | --- |
 | `pnpm dev` | Start development server |
-| `pnpm build` | Build for production |
+| `pnpm build` | Build production bundle |
 | `pnpm start` | Start production server |
-| `pnpm lint` | Run Biome linter |
-| `pnpm format` | Format code |
+| `pnpm lint` | Run Biome checks |
+| `pnpm typecheck` | Run TypeScript checks (`tsc --noEmit`) |
+| `pnpm format` | Format code with Biome |
+| `pnpm test` | Run Vitest in watch mode |
+| `pnpm test:run` | Run Vitest once |
+| `pnpm test:coverage` | Generate coverage report |
+| `pnpm spellcheck` | Run cspell on TS/TSX files |
+| `pnpm run ci` | Run full local quality gate |
+| `pnpm security:audit` | Scan dependencies for high+ vulnerabilities |
+| `pnpm security:secrets` | Scan repository for hardcoded secrets |
+
+## Engineering Quality Gates
+
+Use these commands before opening a PR:
+
+```bash
+pnpm run ci
+pnpm security:audit
+pnpm security:secrets
+```
+
+Required CI checks:
+
+- `quality` (lint, typecheck, test, build, spellcheck)
+- `security-sca` (dependency vulnerability scan)
+- `security-secret` (secret scan with gitleaks)
+
+Recommended branch protection for `main`:
+
+- Require pull request before merging
+- Require at least 1 approving review
+- Require status checks to pass before merging:
+  - `quality`
+  - `security-sca`
+  - `security-secret`
+
+See also:
+
+- `docs/engineering/ci-quality-gates.md`
+- `docs/engineering/security-baseline.md`
+
+## Environment Notes
+
+- Never commit secrets; keep private values in `.env.local`.
+- All app code should read env values from `src/shared/config/env.ts`.
+- Production build requires `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`.
+
+## Supported Chains
+
+Current default chain configuration is defined in `src/shared/config/wagmi.ts`.
+
+## Contributing
+
+- Follow Conventional Commits (`feat:`, `fix:`, `chore:`, etc.)
+- Keep PRs small and focused
+- Include validation evidence for behavior changes
 
 ## License
 
