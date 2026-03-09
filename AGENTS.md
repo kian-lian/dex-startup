@@ -22,6 +22,8 @@ Keep business logic in feature modules and move reusable cross-feature code to `
 - `pnpm run ci`: Run full local quality gate.
 - `pnpm security:audit`: Scan dependencies for high+ vulnerabilities.
 - `pnpm security:secrets`: Scan repository for hardcoded secrets.
+- `pnpm analyze`: Bundle size analysis (opens browser report).
+- `pnpm changeset`: Add a changeset entry for version/changelog tracking.
 
 ## Coding Style & Naming Conventions
 - Language: TypeScript with `strict` mode.

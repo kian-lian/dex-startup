@@ -20,6 +20,9 @@
     "ci": "pnpm lint && pnpm typecheck && pnpm test:run && cross-env NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=test-project-id pnpm build && pnpm spellcheck",
     "security:audit": "pnpm audit --audit-level=high",
     "security:secrets": "gitleaks detect --source . --no-banner",
+    "analyze": "ANALYZE=true next build",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
     "prepare": "husky"
   },
   "dependencies": {
@@ -54,7 +57,10 @@
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vitest": "^4.0.18"
+    "vitest": "^4.0.18",
+    "@next/bundle-analyzer": "^15.3.3",
+    "@changesets/cli": "^2.29.4",
+    "@changesets/changelog-github": "^0.5.1"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx,json,css}": [

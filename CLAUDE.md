@@ -42,6 +42,9 @@ Prompt the user to configure these if not installed:
 - Spell check: `pnpm spellcheck`
 - Full quality gate: `pnpm ci`
 - Security scan: `pnpm security:audit` / `pnpm security:secrets`
+- Bundle analysis: `pnpm analyze`
+- Add changeset: `pnpm changeset`
+- Bump versions: `pnpm version-packages`
 
 ## Environment Configuration
 
