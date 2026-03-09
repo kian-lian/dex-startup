@@ -37,7 +37,7 @@
     "wagmi": "^2.19.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.0",
+    "@biomejs/biome": "2.4.6",
     "@commitlint/cli": "^20.4.3",
     "@commitlint/config-conventional": "^20.4.3",
     "@tailwindcss/postcss": "^4.2.1",
