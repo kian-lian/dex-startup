@@ -2,6 +2,26 @@
   "mcpServers": {
     "Sentry": {
       "url": "https://mcp.sentry.dev/mcp/biteagle-sz/javascript-nextjs"
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "next-devtools": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/next-devtools-mcp@latest"]
+    },
+    "github": {
+      "command": "gh",
+      "args": ["mcp-server"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"]
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
     }
   }
 }
