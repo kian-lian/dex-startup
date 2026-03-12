@@ -119,6 +119,27 @@ feat/xxx  ──PR──▸  dev  ──PR (merge commit)──▸  main
 
 Release automation (Release Please) only triggers on `main`, so releases happen after `dev → main` merges.
 
+## Versioning & Release
+
+The project uses [Release Please](https://github.com/googleapis/release-please) for automated releases, triggered on merges to `main`. Version bumps follow [Semantic Versioning](https://semver.org/) and are determined by Conventional Commit prefixes:
+
+| Commit prefix | Version bump | Example (`0.2.0` →) |
+|---|---|---|
+| `fix:` | PATCH | `0.2.1` |
+| `feat:` | MINOR | `0.3.0` |
+| `feat!:` or `BREAKING CHANGE:` footer | MAJOR | `1.0.0` |
+| `chore:`, `docs:`, `refactor:`, etc. | No release | — |
+
+Breaking changes can be indicated by:
+- Adding `!` after the type/scope: `feat!:` or `feat(swap)!:`
+- Adding a `BREAKING CHANGE:` footer in the commit body (after a blank line)
+
+When multiple commits are included in a release, the **highest-level** change wins (BREAKING > feat > fix).
+
+> **Note:** While MAJOR version is `0` (i.e., `0.x.x`), breaking changes bump MINOR instead of MAJOR per semver convention — the `0.x` range signals initial development.
+
+Configuration files: `.release-please-config.json`, `.release-please-manifest.json`.
+
 ## Commit & Pull Request Guidelines
 - Commit format: Conventional Commits (e.g., `feat(wallet): add connect state`).
 - Allowed commit types are enforced by commitlint; subject max length is 72.
