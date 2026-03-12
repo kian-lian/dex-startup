@@ -42,19 +42,16 @@ Prompt the user to configure these if not installed:
 - Tests: `pnpm test` (watch) / `pnpm test:run` (one-shot)
 - Coverage: `pnpm test:coverage`
 - Spell check: `pnpm spellcheck`
-- Full quality gate: `pnpm ci`
+- Full quality gate: `pnpm run ci`
 - Security scan: `pnpm security:audit` / `pnpm security:secrets`
 - Bundle analysis: `pnpm analyze`
 
 ## Environment Configuration
 
-Per-environment config is managed via `.env.*` files, with a single entry point at `src/shared/config/env.ts`:
+Environment variables are managed via `.env.local` (gitignored), with a single typed entry point at `src/shared/config/env.ts`:
 
-- `.env` — shared defaults (committed to git)
-- `.env.development` — loaded during `pnpm dev` (testnet, Sentry off)
-- `.env.test` — loaded during vitest
-- `.env.production` — loaded during `pnpm build` (mainnet, Sentry sampling)
-- `.env.local` — local secret overrides (gitignored)
+- `.env.example` — lists all available variables with descriptions (committed)
+- `.env.local` — actual values for local development (gitignored)
 
 Business code imports config from `@/shared/config/env` — never read `process.env` directly.
 
