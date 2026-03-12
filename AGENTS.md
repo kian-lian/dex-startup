@@ -105,6 +105,20 @@ import { SwapCard } from '@/features/swap/components/swap-card'
 - Place tests close to modules (e.g., `src/shared/lib/__tests__/address.test.ts`).
 - Before PR: run `pnpm test:run` (and `pnpm test:coverage` for larger changes).
 
+## Branch Strategy
+
+The project uses a **feature → dev → main** workflow:
+
+- **`main`** — Production branch. Only accepts PRs from `dev` (merge commit). Protected: requires PR, CI passing, and at least one approval.
+- **`dev`** — Integration branch. Accepts PRs from feature branches. Protected: requires PR and CI passing.
+- **`feat/xxx`** — Feature branches. Created from `dev`, merged back to `dev` via PR.
+
+```
+feat/xxx  ──PR──▸  dev  ──PR (merge commit)──▸  main
+```
+
+Release automation (Release Please) only triggers on `main`, so releases happen after `dev → main` merges.
+
 ## Commit & Pull Request Guidelines
 - Commit format: Conventional Commits (e.g., `feat(wallet): add connect state`).
 - Allowed commit types are enforced by commitlint; subject max length is 72.
@@ -117,4 +131,4 @@ import { SwapCard } from '@/features/swap/components/swap-card'
 ## Security & Configuration Tips
 - Never commit secrets; use `.env.local`.
 - Read env values through `src/shared/config/env.ts`.
-- Keep `main` protected: require PR, at least one approval, and passing checks (`quality`, `security-sca`, `security-secret`).
+- Keep `main` and `dev` protected: require PR and passing checks (`quality`, `security-sca`, `security-secret`). `main` additionally requires at least one approval.
