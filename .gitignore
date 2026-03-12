@@ -31,9 +31,10 @@ yarn-error.log*
 .pnpm-debug.log*
 firebase-debug.log
 
-# env files — only ignore local overrides (which contain real secrets)
-# .env, .env.development, .env.test, .env.production are committed (non-secret defaults)
-.env*.local
+# env files — only .env.example is committed; all others are local
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -44,6 +45,3 @@ next-env.d.ts
 
 # claude code - local overrides (personal, not shared)
 .claude/settings.local.json
-
-# Sentry Config File
-.env.sentry-build-plugin

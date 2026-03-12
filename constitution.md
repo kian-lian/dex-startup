@@ -19,7 +19,7 @@ This document defines immutable core development principles. All AI Agents must 
 Web3 projects directly handle user assets. Security is the prerequisite for all work.
 
 - **1.1 (Zero Private Key Access):** Project code must never handle, store, or transmit user private keys. All signing operations are delegated to wallets (Wagmi/RainbowKit).
-- **1.2 (Environment Variable Isolation):** Secrets, API keys, and Project IDs are injected via `.env.local`, never hardcoded. Only local override files (for example `.env.local`, `.env.development.local`) are excluded by `.gitignore`; shared non-secret defaults in `.env*` may be committed.
+- **1.2 (Environment Variable Isolation):** Secrets, API keys, and Project IDs are injected via `.env.local`, never hardcoded. Only `.env.example` (a template with no real values) is committed; all other `.env*` files are gitignored.
 - **1.3 (Input Validation):** All user-supplied on-chain parameters (addresses, amounts, slippage) must be validated before submission using `viem` utility functions (`isAddress`, `parseEther`). Do not implement custom validation logic.
 - **1.4 (Dependency Prudence):** Web3-related dependencies are limited to `wagmi`, `viem`, `@rainbow-me/rainbowkit`, and their official ecosystem. Evaluate security and necessity before introducing new dependencies.
 - **1.5 (Slippage Protection):** All swap transactions must set a slippage cap. Transactions without slippage protection are forbidden. Default slippage should be ≤ 0.5%; users may adjust but must receive a clear high-slippage warning.

@@ -34,35 +34,47 @@ Prompt the user to configure these if not installed:
 ## Commands
 
 - Dev server: `pnpm dev`
+- Build: `pnpm build`
+- Start production: `pnpm start`
 - Type check: `pnpm typecheck`
 - Lint: `pnpm lint`
 - Format: `pnpm format`
 - Tests: `pnpm test` (watch) / `pnpm test:run` (one-shot)
 - Coverage: `pnpm test:coverage`
 - Spell check: `pnpm spellcheck`
-- Full quality gate: `pnpm ci`
+- Full quality gate: `pnpm run ci`
 - Security scan: `pnpm security:audit` / `pnpm security:secrets`
 - Bundle analysis: `pnpm analyze`
-- Add changeset: `pnpm changeset`
-- Bump versions: `pnpm version-packages`
 
 ## Environment Configuration
 
-Per-environment config is managed via `.env.*` files, with a single entry point at `src/shared/config/env.ts`:
+Environment variables are managed via `.env.local` (gitignored), with a single typed entry point at `src/shared/config/env.ts`:
 
-- `.env` — shared defaults (committed to git)
-- `.env.development` — loaded during `pnpm dev` (testnet, Sentry off)
-- `.env.test` — loaded during vitest
-- `.env.production` — loaded during `pnpm build` (mainnet, Sentry sampling)
-- `.env.local` — local secret overrides (gitignored)
+- `.env.example` — lists all available variables with descriptions (committed)
+- `.env.local` — actual values for local development (gitignored)
 
 Business code imports config from `@/shared/config/env` — never read `process.env` directly.
 
 ## Commit Messages
 
 - **禁止** 在提交信息中添加 `Co-Authored-By` AI 署名（如 `Co-Authored-By: Claude ...`）。此规则由 commitlint 的 `no-ai-co-author` 规则强制执行。
+- Conventional Commits 格式，允许的 type: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `revert`
+- Subject 最大长度: 72 字符
+
+## Thinking Strategy
+
+- 遇到需要深度复杂思考的任务时（如架构设计、复杂 bug 分析、多步骤推理），使用 `/ultrathink` skill 进行深度推理。
 
 ## Tooling
 
 - Package manager: pnpm
 - GitHub operations: `gh` CLI
+- Engine requirements: Node ≥ 20, pnpm ≥ 9
+
+## Key Files
+
+- `src/middleware.ts` — Next.js middleware (security headers, etc.)
+- `src/instrumentation.ts` / `instrumentation-client.ts` — Sentry initialization
+- `src/shared/config/env.ts` — Environment variable single entry point
+- `src/shared/config/wagmi.ts` — Wagmi/chain configuration
+- `src/shared/providers/` — Global providers (Web3, QueryClient)

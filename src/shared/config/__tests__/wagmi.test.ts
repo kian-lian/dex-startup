@@ -18,7 +18,7 @@ describe("wagmi config", () => {
   });
 
   it("should include testnets when NEXT_PUBLIC_ENABLE_TESTNETS is true", () => {
-    // .env.test sets NEXT_PUBLIC_ENABLE_TESTNETS=true
+    // vitest.setup sets NEXT_PUBLIC_ENABLE_TESTNETS=true
     const chainIds = wagmiConfig.chains.map((chain) => chain.id);
 
     // Sepolia
