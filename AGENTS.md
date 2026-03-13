@@ -87,15 +87,15 @@ All source files (`.ts`, `.tsx`, `.js`, `.jsx`) must include a comment header at
 
 ```ts
 /**
- * author: <author name>
+ * author: <GitHub username>
  * create time: <YYYY-MM-DD HH:mm:ss>
  * last edit time: <YYYY-MM-DD HH:mm:ss>
  * description: <brief description of the file's purpose>
  */
 ```
 
-- **New files:** Set both `create time` and `last edit time` to the current time. Set `author` to the current author.
-- **Modified files:** Update `last edit time` to the current time. If the current author is not in the `author` list, append them (comma-separated). Keep `create time` unchanged.
+- **New files:** Set both `create time` and `last edit time` to the current time. Set `author` to the author's GitHub username.
+- **Modified files (CRITICAL):** **Every** file modification — no matter how small — **must** update `last edit time` to the current time. If the current author's GitHub username is not in the `author` list, append it (comma-separated). Keep `create time` unchanged. This applies to all edits including header-only changes, single-line fixes, and batch updates.
 - **description:** Briefly describe the file's purpose and functionality so others can quickly understand its content.
 - **Excluded:** Auto-generated files (e.g., `shared/components/ui/`), config files (`.json`, `.config.*`), and type declaration files (`.d.ts`) do not need headers.
 

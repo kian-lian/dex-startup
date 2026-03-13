@@ -55,6 +55,10 @@ Environment variables are managed via `.env.local` (gitignored), with a single t
 
 Business code imports config from `@/shared/config/env` — never read `process.env` directly.
 
+## File Header Rule (CRITICAL)
+
+Every time you edit a source file (`.ts`, `.tsx`, `.js`, `.jsx`), you **must** update the `last edit time` field in the file header to the current time. No exceptions — this includes header-only edits, single-line fixes, and batch operations. See `AGENTS.md § File Header Convention` for the full spec.
+
 ## Commit Messages
 
 - **Never** add `Co-Authored-By` AI signatures (e.g., `Co-Authored-By: Claude ...`) to commit messages. This rule is enforced by the commitlint `no-ai-co-author` rule.
